@@ -16,12 +16,12 @@ app.use('/api/users', require('./routes/users'))
 
 const bootstrapApp = async () => {
   try {
-    // await mongoose.connect(DB_CONNECTION)
+    await mongoose.connect(DB_CONNECTION)
 
-    // successs({
-    //   message: `Database connected successfully: \n ${DB_CONNECTION}`,
-    //   badge: true
-    // })
+    success({
+      message: `Database connected successfully: \n ${DB_CONNECTION}`,
+      badge: true
+    })
 
     app.listen(APP_PORT, () => {
       success({

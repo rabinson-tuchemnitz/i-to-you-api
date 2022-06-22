@@ -7,7 +7,8 @@ const UserRegistrationSchema = Joi.object({
     .email()
     .required()
     .custom(uniqueEmail, 'The email is already taken'),
-  password: Joi.string().min(3).max(10).required()
+  password: Joi.string().min(3).max(10).required(),
+  confirm_password: Joi.any().valid(Joi.ref('password')).required()
 })
 
 const UserLoginSchema = Joi.object({

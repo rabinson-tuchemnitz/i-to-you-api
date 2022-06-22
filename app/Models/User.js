@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const RolesConstant = require('../Constants/RolesConstant')
 
 const UserSchema = new Schema(
   {
@@ -12,12 +13,8 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      default: 'user',
-      enum: ['user', 'admin', 'superadmin']
-    },
-    email: {
-      type: String,
-      required: true
+      default: RolesConstant.USER,
+      enum: [RolesConstant.ADMIN, RolesConstant.USER]
     },
     password: {
       type: String,
