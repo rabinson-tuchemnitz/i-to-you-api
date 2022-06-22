@@ -1,4 +1,4 @@
-const validate = require('../app/Http/Middlewares/validationMiddleware')
+const validate = require('../app/Http/Middlewares/validation')
 const {
   registerUser,
   loginUser
@@ -7,6 +7,7 @@ const {
   UserRegistrationSchema,
   UserLoginSchema
 } = require('../app/Http/RequestSchemas/UserRequestSchema')
+const passport = require('passport')
 
 const router = require('express').Router()
 
@@ -14,6 +15,8 @@ router.post('/register', validate(UserRegistrationSchema), registerUser)
 
 router.post('/login', validate(UserLoginSchema), loginUser)
 
-router.post('/logout', async (req, res) => {})
+router.post('/logout', async (req, res) => {
+  res.send('hi')
+})
 
 module.exports = router

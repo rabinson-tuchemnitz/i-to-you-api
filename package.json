@@ -2,9 +2,9 @@
   "name": "i-to-you-api",
   "version": "1.0.0",
   "description": "File Transfer System API",
-  "main": "app.js",
+  "main": "bootstrap/app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon bootstrap/app.js"
   },
   "repository": "git@github.com:rabinson-tuchemnitz/i-to-you-api.git",
   "author": "Rabinson Ghatani",

@@ -49,7 +49,7 @@ module.exports = {
 
       return res.status(200).json({
         message: 'User logged in successfully.',
-        token
+        token: `Bearer ${token}`
       })
     } else {
       return res.status(422).json({
