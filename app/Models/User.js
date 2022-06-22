@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose')
+const bcrypt = require('bcryptjs')
+
 const RolesConstant = require('../Constants/RolesConstant')
 
 const UserSchema = new Schema(
