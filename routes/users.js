@@ -1,5 +1,5 @@
 const validate = require('../app/Http/Middlewares/validation')
-const UserController = require('../app/Http/Controllers/UserController')
+const UserController = require('../app/http/controllers/userController')
 const {
   UserRegistrationSchema,
   UserLoginSchema

@@ -28,7 +28,9 @@ require('./passport')(passport)
 | Middlewares
 |--------------------------------------------------------------------------
 */
-app.use(require('body-parser').json())
+const bp = require('body-parser')
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
 app.use(require('cors')())
 
@@ -38,6 +40,7 @@ app.use(require('cors')())
 |--------------------------------------------------------------------------
 */
 app.use('/api/users', require('../routes/users'))
+app.use('/api/files/', require('../routes/files'))
 
 /*
 |--------------------------------------------------------------------------
