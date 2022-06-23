@@ -7,16 +7,15 @@ const {
   UserRegistrationSchema,
   UserLoginSchema
 } = require('../app/Http/RequestSchemas/UserRequestSchema')
-const passport = require('passport')
+const {
+  authenticated,
+  checkRole
+} = require('../app/Http/Middlewares/authentication')
 
 const router = require('express').Router()
 
 router.post('/register', validate(UserRegistrationSchema), registerUser)
 
 router.post('/login', validate(UserLoginSchema), loginUser)
-
-router.post('/logout', async (req, res) => {
-  res.send('hi')
-})
 
 module.exports = router
