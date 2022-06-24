@@ -11,7 +11,7 @@ const FileSchema = new Schema(
       type: String,
       required: true
     },
-    size: {
+    size_in_bytes: {
       type: Number,
       required: true
     },
@@ -20,18 +20,20 @@ const FileSchema = new Schema(
       default: FileStatusConstant.UNBLOCKED,
       enum: [FileStatusConstant.BLOCKED, FileStatusConstant.UNBLOCKED]
     },
-    file: {
+    file_buffer: {
       type: Buffer,
       required: true
     },
-    uploaded_by: {},
-    last_downloaded_at: {
-      type: Date,
-      default: null
+    uploaded_by: {
+      type: Schema.Types.ObjectId,
+      ref: 'users'
     },
-    batch: {
+    download_url_path: {
       type: String,
       required: true
+    },
+    last_downloaded_at: {
+      type: Date
     }
   },
   {

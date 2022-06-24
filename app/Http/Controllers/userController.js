@@ -10,14 +10,12 @@ module.exports = {
 
     const hashedPassword = await bcrypt.hash(password, 15)
 
-    const newUser = new User({
+    await User.create({
       name,
       email,
       password: hashedPassword,
       role: 'user'
     })
-
-    await newUser.save()
 
     return res.status(201).json({
       message: 'User registered successfully.'
