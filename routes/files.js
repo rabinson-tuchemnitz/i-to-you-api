@@ -1,4 +1,5 @@
 const FileController = require('../app/Http/Controllers/FileController')
+const { CheckReferrer } = require('../app/Http/Middlewares/CheckReferrer')
 const validate = require('../app/Http/Middlewares/RequestValidation')
 
 const {
@@ -8,6 +9,6 @@ const {
 const router = require('express').Router()
 
 router.post('/upload', validate(FileUploadRequest), FileController.uploadFile)
-router.get('/download/:path', FileController.downloadFile)
+router.get('/download/:path', CheckReferrer, FileController.downloadFile)
 
 module.exports = router
