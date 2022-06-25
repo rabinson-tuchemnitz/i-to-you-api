@@ -37,6 +37,7 @@ module.exports = {
 
           const returnFiles = uploadedFiles.map(file => {
             return {
+              id: file._id,
               name: file.name,
               size_in_bytes: file.size_in_bytes,
               type: file.type,
@@ -67,15 +68,45 @@ module.exports = {
       const filePath = req.params.path
       const file = await File.findOne({ download_url_path: filePath })
 
+      await file.updateOne({
+        last_downloaded_at: Date.now()
+      })
+
       res.writeHead(200, {
         'Content-Disposition': `attachment; filename="${file.name}"`,
         'Content-Type': file.type
       })
+
       const download = Buffer.from(file.file_buffer, 'base64')
       res.end(download)
     } catch (err) {
       res.status(500).send({
         message: 'Failed to upload the file',
+        success: false
+      })
+    }
+  },
+
+  updateFile: async (req, res) => {
+    try {
+      const id = req.params.id
+
+      await File.updateOne(
+        {
+          _id: id
+        },
+        {
+          status: req.body.status
+        }
+      )
+
+      res.status(200).send({
+        message: 'File updated successfully',
+        success: true
+      })
+    } catch (err) {
+      res.status(500).send({
+        message: 'Failed ot update the file',
         success: false
       })
     }
