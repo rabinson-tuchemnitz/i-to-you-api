@@ -7,6 +7,6 @@ module.exports = {
   DB_CONNECTION: process.env.DB_CONNECTION,
   APP_SECRET: process.env.APP_SECRET,
 
-  MAX_FILE_SIZE: 2 * 1024 * 1024,
+  MAX_FILE_SIZE: 1024,
   MAX_FILE_UPLOAD: 5
 }

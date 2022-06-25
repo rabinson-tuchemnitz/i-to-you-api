@@ -1,9 +1,9 @@
 const validate = require('../app/Http/Middlewares/validation')
 const UserController = require('../app/http/controllers/userController')
 const {
-  UserRegistrationSchema,
-  UserLoginSchema
-} = require('../app/Http/RequestSchemas/UserRequestSchema')
+  UserRegistrationRequest,
+  UserLoginRequest
+} = require('../app/Http/Requests/UserResourceRequests')
 const {
   authenticated,
   checkRole
@@ -13,10 +13,10 @@ const router = require('express').Router()
 
 router.post(
   '/register',
-  validate(UserRegistrationSchema),
+  validate(UserRegistrationRequest),
   UserController.registerUser
 )
 
-router.post('/login', validate(UserLoginSchema), UserController.loginUser)
+router.post('/login', validate(UserLoginRequest), UserController.loginUser)
 
 module.exports = router

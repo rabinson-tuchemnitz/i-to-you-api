@@ -1,7 +1,7 @@
 const Joi = require('joi')
-const { uniqueEmail } = require('../../rules/validateEmail')
+const { uniqueEmail } = require('../../Rules/UserResourceRules')
 
-const UserRegistrationSchema = Joi.object({
+const UserRegistrationRequest = Joi.object({
   name: Joi.string().min(1).required(),
   email: Joi.string()
     .email()
@@ -11,12 +11,12 @@ const UserRegistrationSchema = Joi.object({
   confirm_password: Joi.any().valid(Joi.ref('password')).required()
 })
 
-const UserLoginSchema = Joi.object({
+const UserLoginRequest = Joi.object({
   email: Joi.string().email().lowercase().required(),
   password: Joi.string().min(4).required()
 })
 
 module.exports = {
-  UserRegistrationSchema,
-  UserLoginSchema
+  UserRegistrationRequest,
+  UserLoginRequest
 }
