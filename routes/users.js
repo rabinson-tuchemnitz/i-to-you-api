@@ -4,10 +4,6 @@ const {
   UserRegistrationRequest,
   UserLoginRequest
 } = require('../app/Http/Requests/UserResourceRequests')
-const {
-  authenticated,
-  checkRole
-} = require('../app/Http/Middlewares/Authentication')
 
 const router = require('express').Router()
 
