@@ -1,7 +1,7 @@
 const File = require('../../Models/File')
 const UniqueStringGenerator = require('unique-string-generator')
 const { generateDownloadUrl } = require('../../Helpers/helper')
-const { upload } = require('../Middlewares/upload')
+const { upload } = require('../Middlewares/UploadFile')
 
 module.exports = {
   uploadFile: async (req, res) => {

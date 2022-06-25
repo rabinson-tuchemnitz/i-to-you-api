@@ -1,4 +1,4 @@
-const validate = require('../app/Http/Middlewares/validation')
+const validate = require('../app/Http/Middlewares/RequestValidation')
 const UserController = require('../app/http/controllers/userController')
 const {
   UserRegistrationRequest,
@@ -7,7 +7,7 @@ const {
 const {
   authenticated,
   checkRole
-} = require('../app/Http/Middlewares/authentication')
+} = require('../app/Http/Middlewares/Authentication')
 
 const router = require('express').Router()
 

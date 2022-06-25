@@ -1,5 +1,5 @@
 const FileController = require('../app/Http/Controllers/FileController')
-const validate = require('../app/Http/Middlewares/validation')
+const validate = require('../app/Http/Middlewares/RequestValidation')
 
 const {
   FileUploadRequest
