@@ -5,15 +5,7 @@ const fileStorage = multer.memoryStorage()
 
 const upload = multer({
   storage: fileStorage,
-  limits: { fileSize: MAX_FILE_SIZE },
-  fileFilter: (req, file, cb) => {
-    if (file.size <= MAX_FILE_SIZE) {
-      cb(null, true)
-    } else {
-      cb(null, false)
-      return cb(new Error('Invalid file size'))
-    }
-  }
+  limits: { fileSize: MAX_FILE_SIZE }
 }).array('files', MAX_FILE_UPLOAD)
 
 module.exports = {

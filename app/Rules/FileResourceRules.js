@@ -6,8 +6,16 @@ const fileExistenceFromDownloadPath = async path => {
   return !file
 }
 
+const validateFileSize = files => {
+  let isValid = true
+  files.forEach(file => {
+    if (file.size > MAX_FILE_SIZE) {
+      isValid = false
+    }
+  })
+  return isValid
+}
 module.exports = {
   fileExistenceFromDownloadPath,
-  fileSizeValidation,
-  maxFileValidation
+  validateFileSize
 }

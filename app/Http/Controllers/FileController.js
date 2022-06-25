@@ -2,6 +2,7 @@ const File = require('../../Models/File')
 const UniqueStringGenerator = require('unique-string-generator')
 const { generateDownloadUrl } = require('../../Helpers/helper')
 const { upload } = require('../Middlewares/UploadFile')
+const { validateFileSize } = require('../../Rules/FileResourceRules')
 
 module.exports = {
   uploadFile: async (req, res) => {
@@ -12,6 +13,12 @@ module.exports = {
         } else {
           const files = req.files
           if (files.length < 1) {
+            res.status(422).send({
+              error: 'files is required',
+              success: false
+            })
+          }
+          if (!validateFileSize(files)) {
             res.status(422).send({
               error: 'files is required',
               success: false
