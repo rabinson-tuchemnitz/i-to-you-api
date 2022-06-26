@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const FileStatusConstant = require('../Constants/FileStatusConstant')
+const FileRequestSchema = require('./FileRequests')
 
 const FileSchema = new Schema(
   {
@@ -18,7 +19,7 @@ const FileSchema = new Schema(
     status: {
       type: String,
       default: FileStatusConstant.UNBLOCKED,
-      enum: [FileStatusConstant.BLOCKED, FileStatusConstant.UNBLOCKED]
+      enum: []
     },
     file_buffer: {
       type: Buffer,
@@ -34,6 +35,9 @@ const FileSchema = new Schema(
     },
     last_downloaded_at: {
       type: Date
+    },
+    pending_requests: {
+      type: [FileRequestSchema]
     }
   },
   {

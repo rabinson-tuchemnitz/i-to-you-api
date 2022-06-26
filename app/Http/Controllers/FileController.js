@@ -3,6 +3,8 @@ const UniqueStringGenerator = require('unique-string-generator')
 const { generateDownloadUrl } = require('../../Helpers/helper')
 const { upload } = require('../Middlewares/UploadFile')
 const { validateFileSize } = require('../../Rules/FileResourceRules')
+const FileStatusConstant = require('../../Constants/FileStatusConstant')
+const { options } = require('joi')
 
 module.exports = {
   uploadFile: async (req, res) => {
@@ -89,11 +91,19 @@ module.exports = {
 
   updateFile: async (req, res) => {
     try {
-      const id = req.params.id
+      const fileId = req.params.file_id
+
+      const file = await File.findOne({ _id: fileId })
+      if (!file) {
+        res.status(404).send({
+          message: 'File not found',
+          success: false
+        })
+      }
 
       await File.updateOne(
         {
-          _id: id
+          _id: fileId
         },
         {
           status: req.body.status
@@ -106,6 +116,86 @@ module.exports = {
       })
     } catch (err) {
       res.status(500).send({
+        message: 'Failed ot update the file',
+        success: false
+      })
+    }
+  },
+
+  createChangeRequest: async (req, res) => {
+    try {
+      const fileId = req.params.file_id
+      const { name, email, action, reason } = req.body
+      // Check if file exists
+      const file = await File.findOne({ _id: fileId })
+      if (!file) {
+        return res.status(404).send({
+          message: 'File not found',
+          success: false
+        })
+      }
+
+      // Check previous request action and validate the request
+      if (file.status === action) {
+        return res.status(409).send({
+          message: 'File already on the requested status',
+          success: false
+        })
+      }
+
+      await File.updateOne(
+        { _id: fileId },
+        {
+          $push: {
+            pending_requests: {
+              name,
+              email,
+              reason
+            }
+          }
+        }
+      )
+      return res.status(200).send({
+        message: 'Change reqeusted successfully',
+        sucess: false
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).send({
+        message: 'Failed ot update the file',
+        success: false
+      })
+    }
+  },
+
+  deleteChangeRequest: async (req, res) => {
+    try {
+      const fileId = req.params.file_id
+
+      // Check if file exists
+      const file = await File.findOne({ _id: fileId })
+      if (!file) {
+        return res.status(404).send({
+          message: 'File not found',
+          success: false
+        })
+      }
+
+      await File.updateOne(
+        { _id: fileId },
+        {
+          $set: {
+            pending_requests: []
+          }
+        }
+      )
+
+      return res.status(200).send({
+        message: 'Request removed successfully',
+        success: true
+      })
+    } catch (err) {
+      return res.status(500).send({
         message: 'Failed ot update the file',
         success: false
       })

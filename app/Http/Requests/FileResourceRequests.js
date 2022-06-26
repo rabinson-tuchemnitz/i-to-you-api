@@ -12,7 +12,15 @@ const FileUpdateRequest = Joi.object({
     .required()
 })
 
+const FileChangeRequest = Joi.object({
+  email: Joi.string().email().required(),
+  name: Joi.string().required(),
+  reason: Joi.string().required(),
+  action: Joi.valid(FileStatusConstant.BLOCKED, FileStatusConstant.UNBLOCKED)
+})
+
 module.exports = {
   FileUploadRequest,
-  FileUpdateRequest
+  FileUpdateRequest,
+  FileChangeRequest
 }

@@ -1,4 +1,5 @@
 const { APP_NAME, APP_ENV, APP_PORT } = require('../config/app')
+const { success } = require('consola')
 
 /*
 |--------------------------------------------------------------------------
@@ -51,5 +52,8 @@ app.use('/api/files/', require('../routes/files'))
 |
 */
 app.listen(APP_PORT, () => {
-  console.log(`${APP_NAME} ${APP_ENV} server started on PORT: ${APP_PORT}`)
+  success({
+    message: `${APP_NAME} ${APP_ENV} server started on PORT: ${APP_PORT}`,
+    badge: true
+  })
 })
