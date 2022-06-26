@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const User = require('./../../Models/User')
 const { APP_SECRET } = require('../../../config/app')
+const RolesConstant = require('../../Constants/RolesConstant')
 
 module.exports = {
   registerUser: async (req, res) => {
@@ -14,7 +15,7 @@ module.exports = {
       name,
       email,
       password: hashedPassword,
-      role: 'user'
+      role: RolesConstant.USER
     })
 
     return res.status(201).json({
@@ -55,7 +56,22 @@ module.exports = {
         success: false
       })
     }
+  },
 
-    res.send('This is login function')
+  addAdmin: async (req, res) => {
+    const { name, email, password, role } = req.body
+
+    const hashedPassword = await bcrypt.hash(password, 15)
+
+    await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: RolesConstant.ADMIN
+    })
+
+    return res.status(201).json({
+      message: 'User registered successfully.'
+    })
   }
 }

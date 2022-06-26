@@ -4,6 +4,11 @@ const {
   UserRegistrationRequest,
   UserLoginRequest
 } = require('../app/Http/Requests/UserResourceRequests')
+const {
+  authenticated,
+  checkRole
+} = require('../app/Http/Middlewares/Authentication')
+const RolesConstant = require('../app/Constants/RolesConstant')
 
 const router = require('express').Router()
 
@@ -14,5 +19,13 @@ router.post(
 )
 
 router.post('/login', validate(UserLoginRequest), UserController.loginUser)
+
+router.post(
+  '/add-admin',
+  authenticated,
+  checkRole([RolesConstant.ADMIN]),
+  validate(UserRegistrationRequest),
+  UserController.createAdmin
+)
 
 module.exports = router
