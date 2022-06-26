@@ -1,5 +1,6 @@
 const { APP_NAME, APP_ENV, APP_PORT } = require('../config/app')
 const { success } = require('consola')
+const { errorHandler } = require('../app/Http/Middlewares/ErrorHandler')
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +45,7 @@ app.use(require('cors')())
 */
 app.use('/api/users', require('../routes/users'))
 app.use('/api/files/', require('../routes/files'))
-
+app.use(errorHandler)
 /*
 |--------------------------------------------------------------------------
 | Server
