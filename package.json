@@ -10,6 +10,7 @@
   "author": "Rabinson Ghatani",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "consola": "^2.15.3",
