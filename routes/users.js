@@ -25,7 +25,7 @@ router.post(
   authenticated,
   checkRole([RolesConstant.ADMIN]),
   validate(UserRegistrationRequest),
-  UserController.createAdmin
+  UserController.addAdmin
 )
 
 module.exports = router

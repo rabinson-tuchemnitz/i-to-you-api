@@ -5,6 +5,8 @@ const { upload } = require('../Middlewares/UploadFile')
 const { validateFileSize } = require('../../Rules/FileResourceRules')
 const FileStatusConstant = require('../../Constants/FileStatusConstant')
 const { options } = require('joi')
+const { unblockFile, blockFile } = require('../../Client/blockListClient')
+const { hashBinaryData } = require('../../Helpers/hash')
 
 module.exports = {
   uploadFile: async (req, res) => {
@@ -77,23 +79,42 @@ module.exports = {
 
   updateFile: async (req, res) => {
     const fileId = req.params.file_id
+    const updateStatus = req.body.status
 
     const file = await File.findOne({ _id: fileId })
     if (!file) {
-      res.status(404).send({
+      return res.status(404).send({
         message: 'File not found',
         success: false
       })
     }
 
+    if (file.status == updateStatus) {
+      return res.status(422).send({
+        message: 'File already in given state',
+        success: false
+      })
+    }
+
+    // Update in database
     await File.updateOne(
       {
         _id: fileId
       },
       {
-        status: req.body.status
+        status: updateStatus
       }
     )
+
+    // Generate hash of file
+    var hashString = await hashBinaryData(file.file_buffer)
+
+    // Update in blocklist webservice
+    if (updateStatus == FileStatusConstant.BLOCKED) {
+      await blockFile(hashString)
+    } else if (updateStatus == FileStatusConstant.UNBLOCKED) {
+      await unblockFile(hashString)
+    }
 
     res.status(200).send({
       message: 'File updated successfully',

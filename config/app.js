@@ -8,5 +8,8 @@ module.exports = {
   APP_SECRET: process.env.APP_SECRET,
 
   MAX_FILE_SIZE: 10 * 1024 * 1024,
-  MAX_FILE_UPLOAD: 5
+  MAX_FILE_UPLOAD: 5,
+
+  USERNAME: process.env.USERNAME,
+  PASSWORD: process.env.PASSWORD
 }

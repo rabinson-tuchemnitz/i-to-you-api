@@ -18,7 +18,7 @@ router.get('/download/:path', CheckReferrer, FileController.downloadFile)
 router.patch(
   '/update/:file_id',
   authenticated,
-  checkRole([RolesConstant.ADMIN]),
+  checkRole([RolesConstant.USER]),
   validate(FileUpdateRequest),
   FileController.updateFile
 )
