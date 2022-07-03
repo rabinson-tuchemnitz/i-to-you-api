@@ -1,11 +1,15 @@
 const RolesConstant = require('../app/Constants/RolesConstant')
 const FileController = require('../app/Http/Controllers/FileController')
 const {
-  authenticated,
+  authenticate,
+  optionalAuthenticate,
   checkRole
 } = require('../app/Http/Middlewares/Authentication')
 const { CheckReferrer } = require('../app/Http/Middlewares/CheckReferrer')
-const validate = require('../app/Http/Middlewares/RequestValidation')
+const {
+  requestValidator,
+  checkCanDownload
+} = require('../app/Http/Middlewares/RequestValidation')
 const {
   FileUpdateRequest,
   FileChangeRequest
@@ -14,12 +18,18 @@ const {
 const router = require('express').Router()
 
 router.post('/upload', FileController.uploadFile)
-router.get('/download/:path', CheckReferrer, FileController.downloadFile)
+router.get(
+  '/download/:path',
+  optionalAuthenticate,
+  checkCanDownload,
+  CheckReferrer,
+  FileController.downloadFile
+)
 router.patch(
   '/update/:file_id',
-  authenticated,
-  checkRole([RolesConstant.USER]),
-  validate(FileUpdateRequest),
+  authenticate,
+  checkRole([RolesConstant.ADMIN]),
+  requestValidator(FileUpdateRequest),
   FileController.updateFile
 )
 
@@ -27,19 +37,19 @@ router.patch(
 
 router.post(
   '/change-request/:file_id',
-  authenticated,
-  validate(FileChangeRequest),
+  authenticate,
+  requestValidator(FileChangeRequest),
   FileController.createChangeRequest
 )
 router.get(
   '/change-request',
-  authenticated,
+  authenticate,
   checkRole([RolesConstant.ADMIN]),
   FileController.getFilesWithChangeRequests
 )
 router.delete(
   '/change-request/:file_id',
-  authenticated,
+  authenticate,
   checkRole([RolesConstant.ADMIN]),
   FileController.deleteChangeRequest
 )

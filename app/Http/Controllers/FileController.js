@@ -4,9 +4,9 @@ const { generateDownloadUrl } = require('../../Helpers/helper')
 const { upload } = require('../Middlewares/UploadFile')
 const { validateFileSize } = require('../../Rules/FileResourceRules')
 const FileStatusConstant = require('../../Constants/FileStatusConstant')
-const { options } = require('joi')
 const { unblockFile, blockFile } = require('../../Client/blockListClient')
 const { hashBinaryData } = require('../../Helpers/hash')
+const UnRegisteredUserModel = require('../../Models/UnRegisteredUser')
 
 module.exports = {
   uploadFile: async (req, res) => {
@@ -62,6 +62,12 @@ module.exports = {
 
   downloadFile: async (req, res) => {
     const filePath = req.params.path
+
+    if (!req.user) {
+      await UnRegisteredUserModel.create({
+        ip: req.ip
+      })
+    }
     const file = await File.findOne({ download_url_path: filePath })
 
     await file.updateOne({

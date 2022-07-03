@@ -1,11 +1,13 @@
-const validate = require('../app/Http/Middlewares/RequestValidation')
+const {
+  requestValidator
+} = require('../app/Http/Middlewares/RequestValidation')
 const UserController = require('../app/http/controllers/userController')
 const {
   UserRegistrationRequest,
   UserLoginRequest
 } = require('../app/Http/Requests/UserResourceRequests')
 const {
-  authenticated,
+  authenticate,
   checkRole
 } = require('../app/Http/Middlewares/Authentication')
 const RolesConstant = require('../app/Constants/RolesConstant')
@@ -14,17 +16,21 @@ const router = require('express').Router()
 
 router.post(
   '/register',
-  validate(UserRegistrationRequest),
+  requestValidator(UserRegistrationRequest),
   UserController.registerUser
 )
 
-router.post('/login', validate(UserLoginRequest), UserController.loginUser)
+router.post(
+  '/login',
+  requestValidator(UserLoginRequest),
+  UserController.loginUser
+)
 
 router.post(
   '/add-admin',
-  authenticated,
+  authenticate,
   checkRole([RolesConstant.ADMIN]),
-  validate(UserRegistrationRequest),
+  requestValidator(UserRegistrationRequest),
   UserController.addAdmin
 )
 
