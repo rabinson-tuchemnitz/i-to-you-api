@@ -90,6 +90,27 @@ module.exports = {
     console.log(res.transferRate) // show transferRate to console
   },
 
+  getUploadedFileList: async (req, res) => {
+    const files = await File.find({ uploaded_by: req.user._id })
+
+    const returnFiles = files.map(file => {
+      return {
+        id: file._id,
+        name: file.name,
+        size_in_bytes: file.size_in_bytes,
+        type: file.type,
+        status: file.status,
+        download_url: generateDownloadUrl(req, file.download_url_path)
+      }
+    })
+
+    res.status(200).send({
+      message: 'Uploaded files fetched successfully',
+      success: true,
+      data: returnFiles
+    })
+  },
+
   updateFile: async (req, res) => {
     const fileId = req.params.file_id
     const updateStatus = req.body.status

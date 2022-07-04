@@ -33,6 +33,13 @@ router.patch(
   FileController.updateFile
 )
 
+router.get(
+  '/uploads',
+  authenticate,
+  checkRole([RolesConstant.USER]),
+  FileController.getUploadedFileList
+)
+
 // Change Requests Endpoints
 
 router.post(
