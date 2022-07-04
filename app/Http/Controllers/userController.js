@@ -40,7 +40,8 @@ module.exports = {
         {
           user_id: user._id,
           role: user.role,
-          email: user.email
+          email: user.email,
+          name: user.name
         },
         APP_SECRET,
         { expiresIn: '10 days' }

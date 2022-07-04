@@ -7,6 +7,7 @@ const FileStatusConstant = require('../../Constants/FileStatusConstant')
 const { unblockFile, blockFile } = require('../../Client/blockListClient')
 const { hashBinaryData } = require('../../Helpers/hash')
 const UnRegisteredUserModel = require('../../Models/UnRegisteredUser')
+var rate = require('transfer-rate')()
 
 module.exports = {
   uploadFile: async (req, res) => {
@@ -61,6 +62,8 @@ module.exports = {
   },
 
   downloadFile: async (req, res) => {
+    var start = process.hrtime()
+
     const filePath = req.params.path
 
     if (!req.user) {
@@ -81,6 +84,9 @@ module.exports = {
 
     const download = Buffer.from(file.file_buffer, 'base64')
     res.end(download)
+    rate(req, res, start)
+
+    console.log(res.transferRate) // show transferRate to console
   },
 
   updateFile: async (req, res) => {
@@ -112,15 +118,15 @@ module.exports = {
       }
     )
 
-    // Generate hash of file
-    var hashString = await hashBinaryData(file.file_buffer)
+    // // Generate hash of file
+    // var hashString = await hashBinaryData(file.file_buffer)
 
-    // Update in blocklist webservice
-    if (updateStatus == FileStatusConstant.BLOCKED) {
-      await blockFile(hashString)
-    } else if (updateStatus == FileStatusConstant.UNBLOCKED) {
-      await unblockFile(hashString)
-    }
+    // // Update in blocklist webservice
+    // if (updateStatus == FileStatusConstant.BLOCKED) {
+    //   await blockFile(hashString)
+    // } else if (updateStatus == FileStatusConstant.UNBLOCKED) {
+    //   await unblockFile(hashString)
+    // }
 
     res.status(200).send({
       message: 'File updated successfully',
