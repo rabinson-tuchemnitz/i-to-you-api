@@ -17,7 +17,7 @@ const {
 
 const router = require('express').Router()
 
-router.post('/upload', FileController.uploadFile)
+router.post('/upload', optionalAuthenticate, FileController.uploadFile)
 router.get(
   '/download/:path',
   optionalAuthenticate,

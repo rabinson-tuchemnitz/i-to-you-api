@@ -8,14 +8,14 @@ const { errorHandler } = require('../app/Http/Middlewares/ErrorHandler')
 |--------------------------------------------------------------------------
 */
 const app = require('express')()
-
+var transfer = require('transfer-rate')
+var rate = transfer()
 /*
 |--------------------------------------------------------------------------
 | Configure Database
 |--------------------------------------------------------------------------
 */
 require('./database.js')()
-console.log('s')
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ require('./passport')(passport)
 | Middlewares
 |--------------------------------------------------------------------------
 */
-app.use(require('helmet')())
+// app.use(require('helmet')())
 
 const bp = require('body-parser')
 app.use(bp.json())

@@ -34,7 +34,8 @@ module.exports = {
             type: file.mimetype,
             size_in_bytes: file.size,
             file_buffer: file.buffer,
-            download_url_path: UniqueStringGenerator.UniqueString()
+            download_url_path: UniqueStringGenerator.UniqueString(),
+            uploaded_by: req.user ? req.user._id : null
           }
         })
         const uploadedFiles = await File.insertMany(fileDocuments)

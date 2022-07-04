@@ -293,7 +293,6 @@ const cookieParser = (cookies, cookieString) => {
 }
 
 const appendCookie = (cookies, cookieArray) => {
-  console.log(cookieArray)
   cookieArray.forEach(ck => {
     cookies = cookieParser(cookies, ck)
   })

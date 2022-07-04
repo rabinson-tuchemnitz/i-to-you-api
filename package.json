@@ -28,6 +28,7 @@
     "passport-anonymous": "^1.0.1",
     "passport-jwt": "^4.0.0",
     "tough-cookie": "^4.0.0",
+    "transfer-rate": "^2.2.0",
     "unique-string": "^3.0.0",
     "unique-string-generator": "^1.0.5"
   },
