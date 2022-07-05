@@ -40,6 +40,8 @@ router.get(
   FileController.getUploadedFileList
 )
 
+router.get('/:file_id/', FileController.getFileDetails)
+
 // Change Requests Endpoints
 
 router.post(

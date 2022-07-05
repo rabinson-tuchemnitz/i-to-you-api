@@ -90,6 +90,33 @@ module.exports = {
     console.log(res.transferRate) // show transferRate to console
   },
 
+  getFileDetails: async (req, res) => {
+    const file = await File.findOne({ id: req.params.file_id }).select({
+      id: 1,
+      name: 1,
+      type: 1,
+      size_in_bytes: 1,
+      status: 1,
+      download_url_path: 1,
+      createdAt: 1
+    })
+
+    const returnFile = {
+      id: file.id,
+      name: file.name,
+      size_in_bytes: file.size_in_bytes,
+      type: file.type,
+      status: file.status,
+      uploaded_at: file.createdAt
+    }
+
+    res.status(200).send({
+      message: 'File fetched successfully.',
+      success: true,
+      data: returnFile
+    })
+  },
+
   getUploadedFileList: async (req, res) => {
     const files = await File.find({ uploaded_by: req.user._id })
 
@@ -100,7 +127,8 @@ module.exports = {
         size_in_bytes: file.size_in_bytes,
         type: file.type,
         status: file.status,
-        download_url: generateDownloadUrl(req, file.download_url_path)
+        download_url: generateDownloadUrl(req, file.download_url_path),
+        uploaded_at: file.createdAt
       }
     })
 
@@ -186,8 +214,16 @@ module.exports = {
       })
     }
 
-    // Check previous request action and validate the request
-    if (file.status === action) {
+    // Check if the request already done by the user
+    const isAlreadyRequested = false
+    file.pending_requests.forEach(request => {
+      if (request.email == email) {
+        isAlreadyRequested = true
+      }
+    })
+
+    // Check if invalid or already in
+    if (file.status === action || isAlreadyRequested) {
       return res.status(409).send({
         message: 'File already on the requested status',
         success: false
