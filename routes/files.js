@@ -24,7 +24,6 @@ router.get(
   optionalAuthenticate,
   checkCanDownload,
   CheckReferrer,
-  LimitDownload,
   FileController.downloadFile
 )
 router.patch(
