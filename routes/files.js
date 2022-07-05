@@ -6,6 +6,7 @@ const {
   checkRole
 } = require('../app/Http/Middlewares/Authentication')
 const { CheckReferrer } = require('../app/Http/Middlewares/CheckReferrer')
+const { LimitDownload } = require('../app/Http/Middlewares/LimitDownload')
 const {
   requestValidator,
   checkCanDownload
@@ -23,6 +24,7 @@ router.get(
   optionalAuthenticate,
   checkCanDownload,
   CheckReferrer,
+  LimitDownload,
   FileController.downloadFile
 )
 router.patch(

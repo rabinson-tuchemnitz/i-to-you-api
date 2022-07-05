@@ -75,6 +75,12 @@ module.exports = {
     }
     const file = await File.findOne({ download_url_path: filePath })
 
+    if (!file) {
+      return res.status(404).send({
+        message: 'File not found',
+        success: false
+      })
+    }
     await file.updateOne({
       last_downloaded_at: Date.now()
     })

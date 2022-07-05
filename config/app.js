@@ -10,6 +10,8 @@ module.exports = {
   MAX_FILE_SIZE: 10 * 1024 * 1024,
   MAX_FILE_UPLOAD: 5,
 
+  DOWNLOAD_LIMIT_KB: 100 * 1024,
+
   USERNAME: process.env.USERNAME,
   PASSWORD: process.env.PASSWORD
 }

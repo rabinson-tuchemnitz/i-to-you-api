@@ -1188,6 +1188,11 @@ negotiator@0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
+node-cron@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/node-cron/-/node-cron-3.0.1.tgz#6a9d5a71513c7ee1eb9e64a673f6730084561d87"
+  integrity sha512-RAWZTNn2M5KDIUV/389UX0EXsqvdFAwc9QwHQceh0Ga56dygqSRthqIjwpgZsoDspHGt2rkHdk9Z4RgfPMdALw==
+
 node-html-parser@^5.3.3:
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-5.3.3.tgz#2845704f3a7331a610e0e551bf5fa02b266341b6"
