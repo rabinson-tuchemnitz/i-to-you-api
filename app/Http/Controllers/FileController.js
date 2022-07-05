@@ -7,6 +7,7 @@ const FileStatusConstant = require('../../Constants/FileStatusConstant')
 const { unblockFile, blockFile } = require('../../Client/blockListClient')
 const { hashBinaryData } = require('../../Helpers/hash')
 const UnRegisteredUserModel = require('../../Models/UnRegisteredUser')
+const { isObjectIdOrHexString } = require('mongoose')
 var rate = require('transfer-rate')()
 
 module.exports = {
@@ -23,7 +24,7 @@ module.exports = {
           })
         }
         if (!validateFileSize(files)) {
-          res.status(422).send({
+          return res.status(422).send({
             error: 'files is required',
             success: false
           })
@@ -51,7 +52,7 @@ module.exports = {
           }
         })
 
-        res.status(201).send({
+        return res.status(201).send({
           message: 'File uploaded successfully.',
           success: true,
           data: {
@@ -91,15 +92,22 @@ module.exports = {
   },
 
   getFileDetails: async (req, res) => {
-    const file = await File.findOne({ id: req.params.file_id }).select({
-      id: 1,
-      name: 1,
-      type: 1,
-      size_in_bytes: 1,
-      status: 1,
-      download_url_path: 1,
-      createdAt: 1
-    })
+    const fileId = req.params.file_id
+
+    if (!isObjectIdOrHexString(fileId)) {
+      return res.sendStatus(404).send({
+        message: 'File not found.',
+        success: false
+      })
+    }
+    const file = await File.findOne({ _id: fileId })
+
+    if (!file) {
+      return res.status(404).send({
+        message: 'File not found.',
+        success: false
+      })
+    }
 
     const returnFile = {
       id: file.id,
@@ -143,6 +151,12 @@ module.exports = {
     const fileId = req.params.file_id
     const updateStatus = req.body.status
 
+    if (!isObjectIdOrHexString(fileId)) {
+      return res.status(404).send({
+        message: 'File not found.',
+        success: false
+      })
+    }
     const file = await File.findOne({ _id: fileId })
     if (!file) {
       return res.status(404).send({
@@ -215,15 +229,17 @@ module.exports = {
     }
 
     // Check if the request already done by the user
-    const isAlreadyRequested = false
     file.pending_requests.forEach(request => {
       if (request.email == email) {
-        isAlreadyRequested = true
+        return res.status(409).send({
+          message: 'File already on the requested status',
+          success: false
+        })
       }
     })
 
     // Check if invalid or already in
-    if (file.status === action || isAlreadyRequested) {
+    if (file.status === action) {
       return res.status(409).send({
         message: 'File already on the requested status',
         success: false
