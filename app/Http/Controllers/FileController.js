@@ -274,6 +274,7 @@ module.exports = {
       }
 
       file.pending_requests.map(reason => {
+        console.log(reason)
         if (reason.by_owner) {
           ownerRequest = reason
         } else {
@@ -345,7 +346,7 @@ module.exports = {
             name,
             email,
             reason,
-            by_owner: user.id == file.uploaded_by
+            by_owner: user && user.id == file.uploaded_by
           }
         }
       }

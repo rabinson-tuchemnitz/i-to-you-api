@@ -53,7 +53,7 @@ router.delete('/:file_id', authenticate, FileController.deleteFile)
 
 router.post(
   '/change-request/:file_id',
-  authenticate,
+  optionalAuthenticate,
   requestValidator(FileChangeRequest),
   FileController.createChangeRequest
 )
