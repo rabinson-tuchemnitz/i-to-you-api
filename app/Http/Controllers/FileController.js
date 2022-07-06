@@ -8,6 +8,7 @@ const { unblockFile, blockFile } = require('../../Client/blockListClient')
 const { hashBinaryData } = require('../../Helpers/hash')
 const UnRegisteredUserModel = require('../../Models/UnRegisteredUser')
 const { isObjectIdOrHexString } = require('mongoose')
+const User = require('../../Models/User')
 var rate = require('transfer-rate')()
 
 module.exports = {
@@ -248,7 +249,7 @@ module.exports = {
   },
 
   getFilesWithChangeRequests: async (req, res) => {
-    const files = await File.find({ 'pending_requests.1': { $exists: true } })
+    const files = await File.find({ 'pending_requests.0': { $exists: true } })
 
     const resultFiles = files.map(file => {
       var ownerRequest = {}
@@ -323,6 +324,8 @@ module.exports = {
       })
     }
 
+    const user = await User.findOne({ email: email })
+
     await File.updateOne(
       { _id: fileId },
       {
@@ -330,7 +333,8 @@ module.exports = {
           pending_requests: {
             name,
             email,
-            reason
+            reason,
+            by_owner: user.id == file.uploaded_by
           }
         }
       }
