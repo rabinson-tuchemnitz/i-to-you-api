@@ -6,7 +6,6 @@ const {
   checkRole
 } = require('../app/Http/Middlewares/Authentication')
 const { CheckReferrer } = require('../app/Http/Middlewares/CheckReferrer')
-const { LimitDownload } = require('../app/Http/Middlewares/LimitDownload')
 const {
   requestValidator,
   checkCanDownload
@@ -17,6 +16,13 @@ const {
 } = require('../app/Http/Requests/FileResourceRequests')
 
 const router = require('express').Router()
+
+router.get(
+  '/pending-requests',
+  authenticate,
+  checkRole([RolesConstant.ADMIN]),
+  FileController.getFilesWithChangeRequests
+)
 
 router.post('/upload', optionalAuthenticate, FileController.uploadFile)
 router.get(
@@ -51,12 +57,7 @@ router.post(
   requestValidator(FileChangeRequest),
   FileController.createChangeRequest
 )
-router.get(
-  '/change-request',
-  authenticate,
-  checkRole([RolesConstant.ADMIN]),
-  FileController.getFilesWithChangeRequests
-)
+
 router.delete(
   '/change-request/:file_id',
   authenticate,

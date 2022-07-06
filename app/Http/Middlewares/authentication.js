@@ -6,7 +6,9 @@ const checkRole = roles => (req, res, next) => {
   if (roles.includes(req.user.role)) {
     return next()
   }
-  throw new Error('Access denied.')
+  return res.status(401).send({
+    message: 'Unauthorized'
+  })
 }
 
 const optionalAuthenticate = (req, res, next) => {

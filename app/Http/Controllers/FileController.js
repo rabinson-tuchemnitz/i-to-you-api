@@ -154,6 +154,7 @@ module.exports = {
   },
 
   updateFile: async (req, res) => {
+    console.log(req.user)
     const fileId = req.params.file_id
     const updateStatus = req.body.status
 
@@ -206,14 +207,31 @@ module.exports = {
 
   getFilesWithChangeRequests: async (req, res) => {
     const files = await File.find({ 'pending_requests.1': { $exists: true } })
+
     const resultFiles = files.map(file => {
-      return {
+      var ownerRequest = {}
+      var userRequests = []
+      var returnFile = {
         _id: file._id,
         name: file.name,
         type: file.type,
-        size: file.type,
+        size_in_bytes: file.size_in_bytes,
         status: file.status
       }
+
+      file.pending_requests.map(reason => {
+        if (reason.by_owner) {
+          ownerRequest = reason
+        } else {
+          userRequests.push(reason)
+        }
+      })
+
+      returnFile['reasons'] = {
+        owner: ownerRequest,
+        users: userRequests
+      }
+      return returnFile
     })
     return res.status(200).send({
       message: 'Pending requests fetched successfully.',
