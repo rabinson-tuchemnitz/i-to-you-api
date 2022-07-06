@@ -41,24 +41,13 @@ module.exports = {
 
     var requestSuccessful = false
 
-    await axios({
+    return await axios({
       method: 'PUT',
       url: blockListServiceURL + fileHash,
       headers: {
         Cookie: shibsession + '=' + cookies[shibsession]
       }
     })
-      .then(response => {
-        if (response.status == 200) {
-          requestSuccessful = true
-        }
-      })
-      .catch(error => {
-        requestSuccessful = false
-        throw new Error('Something went wrong in BlockList Service')
-      })
-
-    return requestSuccessful
   },
 
   unblockFile: async fileHash => {

@@ -209,14 +209,25 @@ module.exports = {
 
     // Generate hash of file
     var hashString = await hashBinaryData(file.file_buffer)
-
     console.log('calling blocking service')
     // Update in blocklist webservice
     if (updateStatus == FileStatusConstant.BLOCKED) {
-      const response = await blockFile(hashString)
+      const response = await blockFile(hashString).catch(error => {
+        console.log(error)
+        return res.status(500).send({
+          message: 'Something went wrong in blocklist service',
+          success: false
+        })
+      })
       console.log(response)
     } else if (updateStatus == FileStatusConstant.UNBLOCKED) {
-      const response = await unblockFile(hashString)
+      const response = await unblockFile(hashString).catch(error => {
+        console.log(error)
+        return res.status(500).send({
+          message: 'Something went wrong in blocklist service',
+          success: false
+        })
+      })
       console.log(response)
     }
 
