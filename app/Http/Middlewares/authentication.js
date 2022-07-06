@@ -12,7 +12,7 @@ const checkRole = roles => (req, res, next) => {
 }
 
 const optionalAuthenticate = (req, res, next) => {
-  const auth = req.header('Authorization')
+  const auth = req.header('Authorization') || req.header('authorization')
   if (auth) {
     authenticate(req, res, next)
   } else {

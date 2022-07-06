@@ -48,7 +48,7 @@ router.get(
 )
 
 router.get('/:file_id/', FileController.getFileDetails)
-
+router.delete('/:file_id', authenticate, FileController.deleteFile)
 // Change Requests Endpoints
 
 router.post(

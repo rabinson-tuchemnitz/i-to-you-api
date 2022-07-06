@@ -18,7 +18,7 @@ module.exports = {
       } else {
         const files = req.files
         if (files.length < 1) {
-          res.status(422).send({
+          return res.status(422).send({
             error: 'files is required',
             success: false
           })
@@ -29,6 +29,7 @@ module.exports = {
             success: false
           })
         }
+
         let fileDocuments = files.map(file => {
           return {
             name: file.originalname,
@@ -132,6 +133,32 @@ module.exports = {
     })
   },
 
+  deleteFile: async (req, res) => {
+    const fileId = req.params.file_id
+    console.log(req.user)
+    if (!isObjectIdOrHexString(fileId)) {
+      return res.sendStatus(404).send({
+        message: 'File not found.',
+        success: false
+      })
+    }
+    const file = await File.findOne({ _id: fileId, uploaded_by: req.user._id })
+
+    if (!file) {
+      return res.status(404).send({
+        message: 'File not found.',
+        success: false
+      })
+    }
+
+    await File.deleteOne({ _id: fileId })
+
+    return res.status(204).send({
+      message: 'File deleted successfully.',
+      success: true
+    })
+  },
+
   getUploadedFileList: async (req, res) => {
     const files = await File.find({ uploaded_by: req.user._id })
 
@@ -142,7 +169,7 @@ module.exports = {
         size_in_bytes: file.size_in_bytes,
         type: file.type,
         status: file.status,
-        download_url: generateDownloadUrl(req, file.download_url_path),
+        download_url: file.download_url_path,
         uploaded_at: file.createdAt
       }
     })
@@ -257,7 +284,12 @@ module.exports = {
 
   createChangeRequest: async (req, res) => {
     const fileId = req.params.file_id
-    const { name, email, action, reason } = req.body
+    var { name, email, reason, action } = req.body
+
+    if (req.user) {
+      name = req.user.reason
+      email = req.user.email
+    }
     // Check if file exists
     const file = await File.findOne({ _id: fileId })
     if (!file) {
@@ -267,15 +299,21 @@ module.exports = {
       })
     }
 
+    var isAlreadyRequested = false
+
     // Check if the request already done by the user
     file.pending_requests.forEach(request => {
       if (request.email == email) {
-        return res.status(409).send({
-          message: 'File already on the requested status',
-          success: false
-        })
+        isAlreadyRequested = true
       }
     })
+
+    if (isAlreadyRequested) {
+      return res.status(409).send({
+        message: 'You have already requested.',
+        success: false
+      })
+    }
 
     // Check if invalid or already in
     if (file.status === action) {
