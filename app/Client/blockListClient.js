@@ -1,6 +1,6 @@
 const { default: axios } = require('axios')
 const FileStatusConstant = require('../Constants/FileStatusConstant')
-const { requestForCookies } = require('./againNew')
+const { requestForCookies } = require('./getBLSToken')
 
 const blockListServiceURL =
   'https://www.tu-chemnitz.de/informatik/DVS/blocklist/'

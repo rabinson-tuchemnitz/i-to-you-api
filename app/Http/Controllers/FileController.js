@@ -154,7 +154,6 @@ module.exports = {
   },
 
   updateFile: async (req, res) => {
-    console.log(req.user)
     const fileId = req.params.file_id
     const updateStatus = req.body.status
 
@@ -179,6 +178,19 @@ module.exports = {
       })
     }
 
+    // Generate hash of file
+    var hashString = await hashBinaryData(file.file_buffer)
+
+    console.log('calling blocking service')
+    // Update in blocklist webservice
+    if (updateStatus == FileStatusConstant.BLOCKED) {
+      const response = await blockFile(hashString)
+      console.log(response)
+    } else if (updateStatus == FileStatusConstant.UNBLOCKED) {
+      const response = await unblockFile(hashString)
+      console.log(response)
+    }
+
     // Update in database
     await File.updateOne(
       {
@@ -188,16 +200,6 @@ module.exports = {
         status: updateStatus
       }
     )
-
-    // // Generate hash of file
-    // var hashString = await hashBinaryData(file.file_buffer)
-
-    // // Update in blocklist webservice
-    // if (updateStatus == FileStatusConstant.BLOCKED) {
-    //   await blockFile(hashString)
-    // } else if (updateStatus == FileStatusConstant.UNBLOCKED) {
-    //   await unblockFile(hashString)
-    // }
 
     res.status(200).send({
       message: 'File updated successfully',
