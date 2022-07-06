@@ -54,8 +54,8 @@ module.exports = {
 
         return res.status(201).send({
           message: 'File uploaded successfully.',
-          success: true,
-          data: {
+          status: true,
+          payload: {
             uploaded_files: returnFiles
           }
         })
@@ -121,7 +121,8 @@ module.exports = {
       size_in_bytes: file.size_in_bytes,
       type: file.type,
       status: file.status,
-      uploaded_at: file.createdAt
+      uploaded_at: file.createdAt,
+      download_path: file.download_url_path
     }
 
     res.status(200).send({
@@ -153,7 +154,7 @@ module.exports = {
     })
   },
 
-  updateFile: async (req, res) => {
+  acceptChangeRequest: async (req, res) => {
     const fileId = req.params.file_id
     const updateStatus = req.body.status
 
@@ -191,13 +192,25 @@ module.exports = {
       console.log(response)
     }
 
+    await File.updateOne(
+      { _id: fileId },
+      {
+        $set: {
+          pending_requests: []
+        }
+      }
+    )
     // Update in database
     await File.updateOne(
       {
         _id: fileId
       },
       {
-        status: updateStatus
+        $set: {
+          status: updateStatus,
+
+          pending_requests: []
+        }
       }
     )
 

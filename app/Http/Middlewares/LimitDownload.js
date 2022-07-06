@@ -3,7 +3,7 @@ const { DOWNLOAD_LIMIT_KB } = require('../../../config/app')
 const LimitDownload = (req, res, next) => {
   if (!req.user) {
     try {
-      const bps = DOWNLOAD_LIMIT_KB * 100000
+      const bps = DOWNLOAD_LIMIT_KB * 1000
       var total = 0
       var resume = req.socket.resume
 

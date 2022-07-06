@@ -13,5 +13,7 @@ module.exports = {
   DOWNLOAD_LIMIT_KB: 100 * 1024,
 
   USERNAME: process.env.USERNAME,
-  PASSWORD: process.env.PASSWORD
+  PASSWORD: process.env.PASSWORD,
+
+  FRONTEND_URL: process.env.FRONTEND_URL
 }

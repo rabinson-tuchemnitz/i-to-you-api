@@ -33,11 +33,11 @@ router.get(
   FileController.downloadFile
 )
 router.patch(
-  '/update/:file_id',
+  '/change-request/:file_id',
   authenticate,
   checkRole([RolesConstant.ADMIN]),
   requestValidator(FileUpdateRequest),
-  FileController.updateFile
+  FileController.acceptChangeRequest
 )
 
 router.get(

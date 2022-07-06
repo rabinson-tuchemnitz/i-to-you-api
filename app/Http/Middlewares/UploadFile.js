@@ -6,7 +6,7 @@ const fileStorage = multer.memoryStorage()
 const upload = multer({
   storage: fileStorage,
   limits: { fileSize: MAX_FILE_SIZE }
-}).array('files', MAX_FILE_UPLOAD)
+}).array('file', MAX_FILE_UPLOAD)
 
 module.exports = {
   upload
