@@ -71,9 +71,15 @@ module.exports = {
     const filePath = req.params.path
 
     if (!req.user) {
-      await UnRegisteredUserModel.create({
-        ip: req.ip
-      })
+      await UnRegisteredUserModel.findOneAndUpdate(
+        {
+          ip: req.ip
+        },
+        {
+          last_downloaded_at: new Date()
+        },
+        { upsert: true }
+      )
     }
     const file = await File.findOne({ download_url_path: filePath })
 
@@ -270,7 +276,8 @@ module.exports = {
         name: file.name,
         type: file.type,
         size_in_bytes: file.size_in_bytes,
-        status: file.status
+        status: file.status,
+        createdAt: file.createdAt
       }
 
       file.pending_requests.map(reason => {
