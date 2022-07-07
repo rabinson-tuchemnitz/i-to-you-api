@@ -129,7 +129,7 @@ module.exports = {
       size_in_bytes: file.size_in_bytes,
       type: file.type,
       status: file.status,
-      uploaded_at: file.createdAt,
+      createdAt: file.createdAt,
       download_path: file.download_url_path
     }
 
