@@ -41,6 +41,13 @@ router.patch(
 )
 
 router.get(
+  '/check-block-status/:file_id',
+  authenticate,
+  checkRole([RolesConstant.ADMIN]),
+  FileController.checkFileBlockStatus
+)
+
+router.get(
   '/uploads',
   authenticate,
   checkRole([RolesConstant.USER]),

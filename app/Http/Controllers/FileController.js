@@ -4,7 +4,11 @@ const { generateDownloadUrl } = require('../../Helpers/helper')
 const { upload } = require('../Middlewares/UploadFile')
 const { validateFileSize } = require('../../Rules/FileResourceRules')
 const FileStatusConstant = require('../../Constants/FileStatusConstant')
-const { unblockFile, blockFile } = require('../../Client/blockListClient')
+const {
+  unblockFile,
+  blockFile,
+  checkBlockStatus
+} = require('../../Client/blockListClient')
 const { hashBinaryData } = require('../../Helpers/hash')
 const UnRegisteredUserModel = require('../../Models/UnRegisteredUser')
 const { isObjectIdOrHexString } = require('mongoose')
@@ -389,5 +393,40 @@ module.exports = {
       message: 'Request removed successfully',
       success: true
     })
+  },
+
+  checkFileBlockStatus: async (req, res) => {
+    const fileId = req.params.file_id
+
+    if (!isObjectIdOrHexString(fileId)) {
+      return res.status(404).send({
+        message: 'File not found.',
+        success: false
+      })
+    }
+    const file = await File.findOne({ _id: fileId })
+    if (!file) {
+      return res.status(404).send({
+        message: 'File not found',
+        success: false
+      })
+    }
+
+    var hashString = await hashBinaryData(file.file_buffer)
+
+    console.log('calling blocking service')
+
+    try {
+      const response = await checkBlockStatus(hashString)
+      return res.status(200).send({
+        message: 'The file is ' + response,
+        sucess: true
+      })
+    } catch (err) {
+      return res.status(500).send({
+        message: 'Something went wrong in blocklist service',
+        success: false
+      })
+    }
   }
 }
