@@ -80,7 +80,7 @@ module.exports = {
           ip: req.ip
         },
         {
-          last_downloaded_at: new Date()
+          last_downloaded: new Date()
         },
         { upsert: true }
       )

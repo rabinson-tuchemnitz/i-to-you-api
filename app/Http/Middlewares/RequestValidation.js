@@ -26,10 +26,11 @@ const checkCanDownload = async (req, res, next) => {
     var diffMs = currentTime - lastDownloadedTime
 
     if (Math.round(diffMs % 86400000 % 3600000 / 60000) < 10) {
+      res.statusMessage = `You can download in ${millisToMinutesAndSeconds(
+        600000 - diffMs
+      )} minutes. Please register to revoke this limitation.`
       return res.status(403).send({
-        message: `You can download in ${millisToMinutesAndSeconds(
-          600000 - diffMs
-        )} minutes. Please register to revoke this limitation.`
+        message: ''
       })
     }
   }
