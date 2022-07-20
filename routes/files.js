@@ -25,6 +25,7 @@ router.get(
 )
 
 router.post('/upload', optionalAuthenticate, FileController.uploadFile)
+router.get('upload', FileController.mockUpload)
 router.get(
   '/download/:path',
   optionalAuthenticate,

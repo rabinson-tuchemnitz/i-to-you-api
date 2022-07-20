@@ -69,6 +69,12 @@ module.exports = {
     })
   },
 
+  mockUpload: async(req, res) => {
+    return res.status(204).send({
+      status: true
+    })
+  },
+
   downloadFile: async (req, res) => {
     var start = process.hrtime()
 
@@ -181,7 +187,7 @@ module.exports = {
         type: file.type,
         status: file.status,
         download_url: file.download_url_path,
-        uploaded_at: file.createdAt
+        createdAt: file.createdAt
       }
     })
 
